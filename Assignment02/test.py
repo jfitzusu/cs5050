@@ -1,4 +1,4 @@
-from proteinsequence import maxScoreDP
+from proteinSeq import maxScoreDP, printTraceBack, traceBack
 
 # Here is some test code where we provide the solutions that DP algorithm for Assignment 2 found.
 #Problem sizes are small enough that recursive can be run
@@ -16,9 +16,8 @@ def makeProblemSolutionSet():
   for i in range(100):
     global A, B
     (A, B) = makeProblem(seed = i)
-    print(i, A, B)
     N, M = len(A)-1, len(B)-1
-    MySolutions.append(maxScoreDP(A, B))
+    MySolutions.append(traceBack(maxScoreDP(A, B), A, B))
   return MySolutions
 Solutions = [-18, -14, -10, -14, -6, -14, -12, -16, -12, -18, -19, -12, -13, -9, -11, -6, -8, -5, -6, -13, -14, -14, -10, -9, -20, -11, -8, -13, -4, -13, -11, -4, -11, -16, -11, -17, -12, -8, -15, -9, -14, -15, -10, -9, -11, -8, -16, -7, -11, 0, -16, -17, -11, -11, -8, -11, -7, -12, -21, -9, -13, -13, -12, -13, -11, -11, -6, -14, -12, -5, -14, -11, -11, -12, -19, -13, -6, -12, -12, -10, -10, -15, -8, -14, -6, -15, -5, -6, -11, -10, -14, -7, -9, -10, -7, -14, -10, -11, -10, -13]
 #Does my algorithm get the same answer?
@@ -26,4 +25,4 @@ Solutions = [-18, -14, -10, -14, -6, -14, -12, -16, -12, -18, -19, -12, -13, -9,
 mySol = makeProblemSolutionSet()
 
 for i in range(len(mySol)):
-    print(f"{i}. {mySol[i]}: {Solutions[i]}. {mySol[i] == Solutions[i]}")
+    printTraceBack(mySol[i])
