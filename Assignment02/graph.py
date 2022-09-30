@@ -24,6 +24,6 @@ def graphTimings(timings):
 
     print(slope, intercept)
 
-    print("time = %.6f * %.3f ^ n" % (np.exp(intercept), np.exp(slope)))
+    print("time = %.10f * %.10f ^ n" % (np.exp(intercept), np.exp(slope)))
 
 graphTimings(dataSet)

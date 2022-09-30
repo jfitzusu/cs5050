@@ -1,0 +1,18 @@
+Part 1:
+-------
+Result from n=2:
+	[1.0, -1.0]
+	[1.0, -1.0]
+Result from n=4:
+	[6.0, 34.0, -2.0, -18.0]
+	[6.0, -6.0, -2.0, 2.0]
+
+
+Part 2:
+-------
+Does the code work? No, it does not. 
+
+Part 3:
+-------
+Explanation:
+There are a few problems in the code. The first, which I'm not quite sure if it qualifies as a problem or just a difference in design views, is that we're even passing in the negative values in the first place. The entire point of returning both evenSol + v * oddSol and evenSol - v * oddSol is so that we can calculate both the negative and positive solution at the same time, with a single value. The second problem is that for some reason you're V2 array is always of size n // 2. This means you're literally just truncating off values as you go down, which again makes no sense. The number of different, unique values you need to calculate doesn't reduce as the recusive solution splits into smaller parts. The third problem is that you're returning the wrong number of values in your base case. As far as I'm aware, you're intent was to make a function that returns both positive and negitive value solutions. This means you need to return a value in your base case not only for each value of V, but also for each negative value of V. In other words, you need to return a list of length 2*v that contains P[0] repeatedly. Finally, you're returning the wrong number of values in your non base cases. I have no idea why you would think you need to return a differing number of values for different reducing steps of the solution. You still have to evaluate each value in V at each step, so your range should be for len(V), not n // 2, on your return list comprehensions. With all those changes, the code actually works now. Although with slightly different inputs required than before. 

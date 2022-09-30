@@ -135,7 +135,7 @@ def traceBack(solutions, seq1, seq2):
     backTrack = np.array(np.zeros(((i + j - 1), 3)), dtype=str) # NOTE: the 0th Index Keeps Track of Whether a Gap Was Opened/Closed at that Location
     index = len(backTrack) - 1
 
-    while i > 0 and j > 0:
+    while i > 0 or j > 0:
 
         # Case Where no Gaps were Created
         if k == 0:
@@ -161,6 +161,7 @@ def traceBack(solutions, seq1, seq2):
                 backTrack[index][2] = seq2[j]
 
                 j -= 1
+                i -= 1
 
         # Case Where a Gap was Created in seq1
         elif k == 1:

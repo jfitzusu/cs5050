@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from proteinSeq import maxScoreDP, traceBack, printTraceBack
 from scipy import stats
+import sys
 
 DATA_FILE = "./data/1632768120472.sequences.fasta"
 VALID_CHARS = ['A', 'G', 'C', 'T']
@@ -36,12 +37,12 @@ returns: Asymmetrical List of Sequences where [i][j] is the Alignment Table of t
 
 
 def compareSequences(sequences):
-    comparisonTable = []
+    comparisonTable = [[0 for i in range(len(sequences))] for j in range(len(sequences))]
 
     for i in range(len(sequences)):
-        comparisonTable.append([])
         for j in range(i + 1, len(sequences)):
-            comparisonTable[i].append(maxScoreDP(sequences[i], sequences[j]))
+            print(i, j)
+            comparisonTable[i][j] = maxScoreDP(sequences[i], sequences[j])
 
     return comparisonTable
 
@@ -103,7 +104,7 @@ def graphTimings(timings):
     plt.show()
 
     slope, intercept, _, _, _ = stats.linregress([sizes], [np.log(t) if t > 0 else 2 ** -100 for t in times])
-    print(f"y = {slope} * ")
+    print(f"y = {np.exp(slope)} * {np.exp(intercept)} ^ n")
 
 
 seq = parseSequences(DATA_FILE)
@@ -115,8 +116,24 @@ for i in range(len(seq)):
 # print(timings1)
 # graphTimings(timings1)
 
+# f = open("Printouts.md", "w")
+# comparisons = compareSequences(seqNoNames[:2])
+#
+# back = traceBack(comparisons[0][])
+
+# sys.stdout = f
+# for i in range(len(comparisons)):
+#     print("\n-----------------------------------------------------------\n")
+#     for j in range(len(comparisons)):
+#         if isinstance(comparisons[i][j], int):
+#             pass
+#         else:
+#             trace = traceBack(comparisons[i][j], seqNoNames[i], seqNoNames[j])
+#             print(f"TraceBack for {i}, {j} Alignment")
+#             printTraceBack(trace, 100)
+
+
+
 comparisons = compareSequences(seqNoNames[0:2])
-print(comparisons)
-print(comparisons[0][0][len(seqNoNames[0]) - 1][len(seqNoNames[1]) - 1][0])
-traceBack = traceBack(comparisons[0][0], seqNoNames[0], seqNoNames[1])
+traceBack = traceBack(comparisons[0][1], seqNoNames[0], seqNoNames[1])
 printTraceBack(traceBack, 100)
