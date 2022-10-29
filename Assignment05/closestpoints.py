@@ -57,6 +57,8 @@ def closestPairY(pts, n):
 
 
 def closestPairMerge(pts, n):
+    return closestPairMergeR(pts, n)[0]
+def closestPairMergeR(pts, n):
     # if only two points, return the distance
     if n == 2:
         if pts[0][Y] > pts[1][Y]:
@@ -64,27 +66,32 @@ def closestPairMerge(pts, n):
         return dist(pts[0], pts[1]), pts
 
     # solve each sub problem and get the min distance
-    minDFirst, firstHalf = closestPairY(pts[0:n // 2], n // 2)
-    minDSecond, secondHalf = closestPairY(pts[n // 2:], n // 2)
+    minDFirst, firstHalf = closestPairMergeR(pts[0:n // 2], n // 2)
+    minDSecond, secondHalf = closestPairMergeR(pts[n // 2:], n // 2)
 
     mergeSorted = [None for i in range(len(firstHalf) + len(secondHalf))]
     i0 = 0
     i1 = 0
     i2 = 0
     while i0 < len(mergeSorted):
-        if i1 < len(firstHalf) and firstHalf[i1] < secondHalf[i2]:
+        if i1 >= len(firstHalf):
+            mergeSorted[i0] = secondHalf[i2]
+            i2 += 1
+        elif i2 >= len(secondHalf):
+            mergeSorted[i0] = firstHalf[i1]
+            i1 += 1
+        elif firstHalf[i1] < secondHalf[i2]:
             mergeSorted[i0] = firstHalf[i1]
             i1 += 1
         else:
             mergeSorted[i0] = secondHalf[i2]
             i2 += 1
         i0 += 1
-
     minD = min(minDFirst, minDSecond)
 
     # find the points in the band around the mid X using minD
     xMid = (pts[n // 2 - 1][X] + pts[n // 2][X]) / 2.0
-    band = [pts[i] for i in range(n) if abs(mergeSorted[i][X] - xMid) <= minD]
+    band = [mergeSorted[i] for i in range(n) if abs(mergeSorted[i][X] - xMid) <= minD]
 
     minBand = math.inf
     for i in range(len(band) - 1):
