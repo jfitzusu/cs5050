@@ -41,3 +41,46 @@ def PQ_FFT(P, Q):
     PQ = FFT(PQsamples, Vconj, m)
     # Clean up the result
     return [int(round(x.real) / m) for x in PQ]
+
+
+"""
+Multiplies Two Numbers of Length n by Recusivley Multiplying Their Parts
+P: Number One, Represented as a List of Integers
+Q: Number Two, Represented as a List of Integers
+n: Length of Both Number Lists
+
+Returns: Product of Two Numbers as an Array
+"""
+
+
+def mult3R(P, Q, n):
+    assert len(P) == len(Q) == n
+    assert math.log(n) / math.log(2) % 1 == 0
+
+    # Base Case, Only 1 Term Remaining
+    if n == 1:
+        return [P[0] * Q[0]]
+
+    s = np.zeros(2 * n - 1)
+
+    # Utilizes Algebraic Identities to Perform P0*Q1 and P1*Q0 Simultaneously
+    addP = np.zeros(n // 2)
+    addQ = np.zeros(n // 2)
+    for i in range(n // 2):
+        addP[i] = P[i] + P[i + n // 2]
+        addQ[i] = Q[i] + Q[i + n // 2]
+
+    s0 = mult3R(P[:n // 2], Q[:n // 2], n // 2)
+    s1 = mult3R(addP, addQ, n // 2)
+    s2 = mult3R(P[n // 2:], Q[n // 2:], n // 2)
+
+    # Combines Results
+    for i in range(n - 1):
+        s[i] += s0[i]
+        s[i + n // 2] += s1[i] - s0[i] - s2[i]
+        s[i + n] += s2[i]
+
+    return s
+
+def mult3(P, Q):
+    return mult3R(P, Q, len(P))
